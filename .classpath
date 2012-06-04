@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/twarql/web/WEB-INF/lib/json-lib-2.3-jdk15.jar"/>
+	<classpathentry kind="lib" path="/twarql/web/WEB-INF/lib/json.jar"/>
+	<classpathentry kind="lib" path="/Users/pramodkoneru549/Downloads/apache-jena-2.7.0-incubating/lib/commons-codec-1.5.jar"/>
+	<classpathentry kind="lib" path="/Users/pramodkoneru549/Downloads/apache-jena-2.7.0-incubating/lib/httpclient-4.1.2.jar"/>
+	<classpathentry kind="lib" path="/Users/pramodkoneru549/Downloads/apache-jena-2.7.0-incubating/lib/httpcore-4.1.3.jar"/>
+	<classpathentry kind="lib" path="/Users/pramodkoneru549/Downloads/apache-jena-2.7.0-incubating/lib/icu4j-3.4.4.jar"/>
+	<classpathentry kind="lib" path="/Users/pramodkoneru549/Downloads/apache-jena-2.7.0-incubating/lib/jena-arq-2.9.0-incubating.jar"/>
+	<classpathentry kind="lib" path="/Users/pramodkoneru549/Downloads/apache-jena-2.7.0-incubating/lib/jena-core-2.7.0-incubating.jar"/>
+	<classpathentry kind="lib" path="/Users/pramodkoneru549/Downloads/apache-jena-2.7.0-incubating/lib/jena-iri-0.9.0-incubating.jar"/>
+	<classpathentry kind="lib" path="/Users/pramodkoneru549/Downloads/apache-jena-2.7.0-incubating/lib/log4j-1.2.16.jar"/>
+	<classpathentry kind="lib" path="/Users/pramodkoneru549/Downloads/apache-jena-2.7.0-incubating/lib/slf4j-api-1.6.4.jar"/>
+	<classpathentry kind="lib" path="/Users/pramodkoneru549/Downloads/apache-jena-2.7.0-incubating/lib/slf4j-log4j12-1.6.4.jar"/>
+	<classpathentry kind="lib" path="/Users/pramodkoneru549/Downloads/apache-jena-2.7.0-incubating/lib/xercesImpl-2.10.0.jar"/>
+	<classpathentry kind="lib" path="/Users/pramodkoneru549/Downloads/apache-jena-2.7.0-incubating/lib/xml-apis-1.4.01.jar"/>
+	<classpathentry kind="lib" path="/Users/pramodkoneru549/Downloads/Jena-2.6.4/lib/arq-2.8.7.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
