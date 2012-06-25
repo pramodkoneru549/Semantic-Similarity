@@ -11,6 +11,7 @@ import java.util.List;
 import org.knoesis.sparql.api.GetAllTriples;
 import org.knoesis.sparql.api.Triple;
 import org.knoesis.utils.EntityEncoder;
+import org.knoesis.utils.Utils;
 import org.knoesis.wikipedia.api.WikipediaParser;
 
 /*
@@ -38,7 +39,7 @@ public class GetAllTriplesForTopic {
 	/*
 	 * This class will give you all the triples for the topic (which is set in the constructor)
 	 */
-	public List<Triple> getTriplesForTopic() throws UnsupportedEncodingException, InterruptedException{
+	public List<Triple> getTriplesForTopic() throws InterruptedException, IOException{
 		
 		List<Triple> triple_for_topic = new ArrayList<Triple>();
 		
@@ -48,11 +49,23 @@ public class GetAllTriplesForTopic {
 				
 				// Making the link into DBpedia referenceable format.
 				String encoded_link = EntityEncoder.encode(link);
+				
+				// String all Wikipedia concepts for topic into the file
+				Utils.writeToFile("Wikipedia_concepts", "http:dbpedia.org/resource/"+encoded_link);
+				
 				System.out.println("The link is "+ encoded_link);
 				
 				// This will give you all the triples for the shortest path between the topic
 				// and the given link.
 				GetAllTriples get_triples = new GetAllTriples(topic, encoded_link, GRAPHURI);
+				
+				List<String> entities = get_triples.getAllConnectedEntities(topic, encoded_link);
+				
+				// Writing all entities to a file
+				for(String entity: entities){
+					Utils.writeToFile("Entities_after_srtst_path", entity);
+				}
+				
 				List<Triple> triples_between_concepts = get_triples.getList_for_triples();
 				if(triples_between_concepts!=null)
 					for(Triple triple : triples_between_concepts){
@@ -79,6 +92,9 @@ public class GetAllTriplesForTopic {
 		return entity.matches("Template:(.*)");
 	}
 	
+	/*
+	 * Checking if it is Wikipedia:...
+	 */
 	public boolean isWikipedia(String entity){
 		return entity.matches("Wikipedia:(.*)");
 	}
@@ -103,16 +119,18 @@ public class GetAllTriplesForTopic {
 		return topic;
 	}
 	
+
 	
 	public static void main(String[] args) throws InterruptedException, IOException {
 		
-		FileWriter writer = new FileWriter(new File("Triples.n3"));
-		BufferedWriter buffer = new BufferedWriter(writer);
+//		FileWriter writer = new FileWriter(new File("Triples.n3"));
+//		BufferedWriter buffer = new BufferedWriter(writer);
 		GetAllTriplesForTopic topic_triples = new GetAllTriplesForTopic("United_States_presidential_election,_2012");
 		List<Triple> triples = topic_triples.getTriplesForTopic();
 		for(Triple triple :triples){
-			buffer.append(triple.toString());
-			buffer.append("\n");
+//			buffer.append(triple.toString());
+//			buffer.append("\n");
+			
 			System.out.println(triple.toString());
 		}
 	}

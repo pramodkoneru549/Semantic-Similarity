@@ -1,4 +1,4 @@
-package org.knoesis.sparql.api;
+		package org.knoesis.sparql.api;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +32,7 @@ public class GetAllTriples {
 		getShortstPath();
 		getAllTriples();
 	}
+	
 	
 	/*
 	 * Method to construct the sparql, to find the shortest route between two concepts.
@@ -107,6 +108,24 @@ public class GetAllTriples {
 	}
 	
 	/*
+	 * Over-loaded method of the above method.
+	 */
+	public ResultSet getShortestPath(String concept1, String concept2) throws InterruptedException{
+		String sparql_query = createSparqlQueryForShrtstPath(concept1, concept2);
+		ResultSet results;
+		QueryRDFGraph query = new QueryRDFGraph(graphURI, sparql_query);
+		try {
+			results = query.query();
+		} catch (ResultSetException e) {
+			// TODO Auto-generated catch block
+			Utils.sleep(7);
+			results = query.query();
+			//e.printStackTrace();
+		}
+		
+		return results;
+	}
+	/*
 	 * This method is used to get the predicates between two concepts.
 	 * @params concepts (raw, not URI's)
 	 */
@@ -133,23 +152,26 @@ public class GetAllTriples {
 	 * 
 	 * Hardcoded for dbpedia.
 	 */
-	public List<String> getAllConnectedEntities(){
+	public List<String> getAllConnectedEntities(String concept1, String concept2) throws InterruptedException{
 		
-		ResultSet results1 = getShortst_path_results();
+		ResultSet results1 = getShortestPath(concept1, concept2);
 		List<String> entities_list = new ArrayList<String>();
 		String concept1URI = "http://dbpedia.org/resource/" + getConcept1();
 		String concept2URI = "http://dbpedia.org/resource/" + getConcept2();
 		
-		System.out.println(concept1URI +"--"+ concept2URI);
+		//System.out.println(concept1URI +"--"+ concept2URI);
 
-		while(results1.hasNext()){
-			String entity = results1.next().getResource("?route").toString();
-			if(concept1URI.equals(entity) || concept2URI.equals(entity))
-				continue;
-			else
-				entities_list.add(entity);
-		}
+		if(results1 != null)
+			while(results1.hasNext()){
+				String entity = results1.next().getResource("?route").toString();
+				if(concept1URI.equals(entity) || concept2URI.equals(entity))
+					continue;
+				else{
+					//System.out.println(entity);
+					entities_list.add(entity);}	
+			}
 		
+		entities_list.add(concept2URI);
 		return entities_list;
 	}
 	
@@ -157,7 +179,7 @@ public class GetAllTriples {
 	 * This method is used to get all the triples between the concepts based on the shortest path.
 	 */
 	public void getAllTriples() throws InterruptedException{
-		ResultSet results2 = shortst_path_results;
+		ResultSet results2 = getShortst_path_results();
 		list_for_triples = new ArrayList<Triple>();
 		List<String> allEntities = new ArrayList<String>();
 		if(results2 != null)
@@ -166,7 +188,7 @@ public class GetAllTriples {
 				allEntities.add(entity);
 			}
 		
-		System.out.println("The entities are" + allEntities);
+		//System.out.println("The entities are" + allEntities);
 		
 		for(int i = 0 ;i< allEntities.size()-1;i++ ){
 			String sub = "<"+allEntities.get(i)+">";
@@ -178,14 +200,50 @@ public class GetAllTriples {
 			}
 		}	
 		
+		
 		//return list_for_triples;
+	}
+	
+	/*
+	 * Over-loaded method for the above.
+	 */
+	public List<Triple> getAllTriples(String concept1,String concept2) throws InterruptedException{
+		ResultSet results2 = getShortestPath(concept1,concept2);
+		List<Triple> triples = new ArrayList<Triple>();
+		List<String> allEntities = new ArrayList<String>();
+		if(results2 != null)
+			while(results2.hasNext()){
+				String entity = results2.next().getResource("?route").toString();
+				allEntities.add(entity);
+			}
+		
+		//System.out.println("The entities are" + allEntities);
+		
+		for(int i = 0 ;i< allEntities.size()-1;i++ ){
+			String sub = "<"+allEntities.get(i)+">";
+			String obj = "<"+allEntities.get(i+1)+">";
+			ResultSet predicates = getPredicates(allEntities.get(i), allEntities.get(i+1));
+			while(predicates.hasNext()){
+				String predicate ="<"+ predicates.next().getResource("?predicate").toString() +">";
+				triples.add(new Triple(sub,predicate,obj));
+			}
+		}			
+		
+		return triples;
 	}
 	
 	public static void main(String[] args) throws InterruptedException {
 		String graphURI = "http://dbpedia.org/sparql/";
-		GetAllTriples getshortestroute = new GetAllTriples( "United_States_presidential_election,_2012","California", graphURI);
-		//getshortestroute.getShortstPath();
+		String concept2 = "Mitt_Romney_presidential_campaign,_2012";
+		String concept1 = "Mitt_Romney";
+		GetAllTriples getshortestroute = new GetAllTriples( concept1,concept2, graphURI);
+		
+		//getshortestroute.getShortstPath();fa
 		List<Triple> triples = getshortestroute.getList_for_triples();	
+		
+		List<String> entities = getshortestroute.getAllConnectedEntities(concept1,concept2);
+		
+		System.out.println("The entities "+ entities);
 		
 		for(Triple triple :triples){
 			System.out.println(triple.toString());

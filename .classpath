@@ -17,5 +17,7 @@
 	<classpathentry kind="lib" path="/Users/pramodkoneru549/Downloads/apache-jena-2.7.0-incubating/lib/xercesImpl-2.10.0.jar"/>
 	<classpathentry kind="lib" path="/Users/pramodkoneru549/Downloads/apache-jena-2.7.0-incubating/lib/xml-apis-1.4.01.jar"/>
 	<classpathentry kind="lib" path="/Users/pramodkoneru549/Downloads/Jena-2.6.4/lib/arq-2.8.7.jar"/>
+	<classpathentry kind="lib" path="/Users/pramodkoneru549/Downloads/jsp-2.1-6.1.11.jar"/>
+	<classpathentry kind="lib" path="/Users/pramodkoneru549/Downloads/org/org.mortbay.jetty.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
